@@ -1,0 +1,120 @@
+---
+title: "Quantified Self's Not Dead: Crossfit your QS Data"
+author: "S Duffy"
+date: "May 11, 2016"
+output: html_document
+---
+#You should create a report describing how you built your model, 
+#how you used cross validation, 
+#what you think the expected out of sample error is, 
+#and why you made the choices you did. 
+#You will also use your prediction model to predict 20 different test cases.
+##Summary
+
+
+
+##Data Exploration
+
+
+```{r loadnlook}
+training <- read.csv("pml-training.csv")
+testing <- read.csv("pml-testing.csv")
+
+dim(training)
+head(training[,1:10])
+str(training$classe)
+```
+
+##Cross Validation
+```{r xvalidation}
+inTrain <- createDataPartition(training$classe, p = 3/4, list=FALSE)
+trainer <- training[ inTrain,]
+tester <- training[-inTrain,]
+inTrain2 <- createDataPartition(training$classe, p = 3/4, list=FALSE)
+trainer2 <- training[ inTrain2,]
+tester2 <- training[-inTrain2,]
+inTrain3 <- createDataPartition(training$classe, p = 3/4, list=FALSE)
+trainer3 <- training[ inTrain3,]
+tester3 <- training[-inTrain3,]
+```
+
+
+
+##Out of Sample Error
+
+
+
+
+
+##Analysis
+
+```{r models}
+set.seed(2317)
+
+##Possible predictors: roll/pitch/yaw, accel, gyros, magnet.  RF v GBM was .073 in favor of RF, going with that.
+mod1 <- train(classe ~ roll_belt + pitch_belt +yaw_belt + roll_arm + pitch_arm + yaw_arm + roll_dumbbell + pitch_dumbbell + yaw_dumbbell,method="rf",data=trainer)
+pred1 <- predict(mod1,tester)
+cm1 <- confusionMatrix(pred1,tester$classe)  ##.9653 Acc
+cm1$overall['Accuracy']
+
+mod12 <- train(classe ~ roll_belt + pitch_belt +yaw_belt + roll_arm + pitch_arm + yaw_arm + roll_dumbbell + pitch_dumbbell + yaw_dumbbell,method="rf",data=trainer2)
+pred12 <- predict(mod12,tester)
+cm12 <- confusionMatrix(pred12,tester2$classe)  ##.9921 Acc
+cm12$overall['Accuracy']
+
+mod13 <- train(classe ~ roll_belt + pitch_belt +yaw_belt + roll_arm + pitch_arm + yaw_arm + roll_dumbbell + pitch_dumbbell + yaw_dumbbell,method="rf",data=trainer3)
+pred13 <- predict(mod13,tester)
+cm13 <- confusionMatrix(pred13,tester3$classe)  ##.9914 Acc
+cm13$overall['Accuracy']
+
+mod2 <- train(classe ~ user_name + roll_belt + pitch_belt +yaw_belt + roll_arm + pitch_arm + yaw_arm + roll_dumbbell + pitch_dumbbell + yaw_dumbbell,method="rf",data=trainer)
+pred2 <- predict(mod2,tester)
+cm2 <- confusionMatrix(pred2,tester$classe)  ##.9649 Acc
+cm2$overall['Accuracy']
+
+mod22 <- train(classe ~ user_name + roll_belt + pitch_belt +yaw_belt + roll_arm + pitch_arm + yaw_arm + roll_dumbbell + pitch_dumbbell + yaw_dumbbell,method="rf",data=trainer2)
+pred22 <- predict(mod22,tester2)
+cm22 <- confusionMatrix(pred22,tester2$classe)  ##.9631 Acc
+cm22$overall['Accuracy']
+
+mod23 <- train(classe ~ user_name + roll_belt + pitch_belt +yaw_belt + roll_arm + pitch_arm + yaw_arm + roll_dumbbell + pitch_dumbbell + yaw_dumbbell,method="rf",data=trainer3)
+pred23 <- predict(mod23,tester3)
+cm23 <- confusionMatrix(pred23,tester3$classe)  ##.9604 Acc
+cm23$overall['Accuracy']
+
+mod3 <- train(classe ~ user_name + roll_belt + pitch_belt +yaw_belt + roll_arm + pitch_arm + yaw_arm + roll_dumbbell + pitch_dumbbell + yaw_dumbbell,method="gbm",data=trainer,verbose=FALSE)
+pred3 <- predict(mod3,tester)
+cm3 <- confusionMatrix(pred3,tester$classe)  ##.8917 Acc
+mod4 <- train(classe ~ user_name + accel_belt_x + accel_belt_y + accel_belt_z + accel_arm_x + accel_arm_y + accel_arm_z + accel_dumbbell_x + accel_dumbbell_y + accel_dumbbell_z ,method="rf",data=trainer)
+pred4 <- predict(mod4,tester)
+cm4 <- confusionMatrix(pred4,tester$classe)  ##.898 Acc
+cm4$overall['Accuracy']
+mod5 <- train(classe ~ user_name + gyros_belt_x + gyros_belt_y + gyros_belt_z + gyros_arm_x + gyros_arm_y + gyros_arm_z + gyros_dumbbell_x + gyros_dumbbell_y + gyros_dumbbell_z ,method="rf",data=trainer)
+pred5 <- predict(mod5,tester)
+cm5 <- confusionMatrix(pred5,tester$classe)  ##.8548 Acc
+cm5$overall['Accuracy']
+mod6 <- train(classe ~ user_name + magnet_belt_x + magnet_belt_y + magnet_belt_z + magnet_arm_x + magnet_arm_y + magnet_arm_z + magnet_dumbbell_x + magnet_dumbbell_y + magnet_dumbbell_z ,method="rf",data=trainer)
+pred6 <- predict(mod6,tester)
+cm6 <- confusionMatrix(pred6,tester$classe)  ##.92598 Acc
+cm6$overall['Accuracy']
+
+
+
+
+```
+
+
+
+
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

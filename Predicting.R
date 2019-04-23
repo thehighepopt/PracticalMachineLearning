@@ -1,3 +1,4 @@
+library(caret)
 data("faithful")
 inTrain <- createDataPartition(y=faithful$waiting, p=0.5, list=FALSE)
 trainFaith <- faithful[inTrain,]
@@ -29,7 +30,7 @@ pred <- predict(modFit,testing)
 qplot(wage,pred,colour=year,data=testing)
 
 index <- seq_along(1:nrow(training))
-ggplot(data = training, aes(x = index, y = CompressiveStrength)) + geom_point() + 
+ggplot(data = training, aes(x = index, y = CompressiveStrength)) + geom_point() +
     theme_bw()
 
 cutCS <- cut2(training$CompressiveStrength, g = 4)
@@ -314,10 +315,10 @@ fcast <- forecast.bats(modfitfc, h=nrow(testing),level=95)
 plot(fcast)
 lines(testing$visitsTumblr,col="red")
 accuracy(fcast,testing$visitsTumblr)
-tab <- table ((testing$visitsTumblr>fcast$lower) & 
+tab <- table ((testing$visitsTumblr>fcast$lower) &
            (testing$visitsTumblr<fcast$upper))
 
-tab[2]/nrow(testing) 
+tab[2]/nrow(testing)
 
 #5
 set.seed(3523)

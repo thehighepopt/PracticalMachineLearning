@@ -1,12 +1,14 @@
 ---
-title: "Quantified Self's Not Dead: Crossfit for your QS Data"
+title: 'Quantified Self''s Not Dead: Crossfit for your QS Data'
 author: "S Duffy"
 date: "May 13, 2016"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ##Background
-Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. This project will use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. 
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement, a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. This project will use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. 
 
 The training data for this project are available here:
 
@@ -20,8 +22,8 @@ https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 ##Data Exploration
 
 ```{r loadnlook, }
-training <- read.csv("C:/Users/stephen.p.duffy/Desktop/pml-training.csv")
-testing <- read.csv("C:/Users/stephen.p.duffy/Desktop/pml-testing.csv")
+training <- read.csv("C:/Users/stephen.p.duffy/Documents/GitHub/PracticalMachineLearning/pml-training.csv")
+testing <- read.csv("C:/Users/stephen.p.duffy/Documents/GitHub/PracticalMachineLearning/pml-testing.csv")
 
 d <- dim(training)
 h <- head(training[,1:10])
@@ -70,7 +72,7 @@ For the three models that had the highest accuracy (all above 90% where the rema
 set.seed(2317)
 
 ##This is the winning model
-mod1 <- train(classe ~ roll_belt + pitch_belt +yaw_belt + roll_arm + pitch_arm + yaw_arm + roll_dumbbell + pitch_dumbbell + yaw_dumbbell,method="rf",data=trainer)
+mod1 <- train(classe ~ roll_belt + pitch_belt +yaw_belt + roll_arm + pitch_arm + yaw_arm + roll_dumbbell + pitch_dumbbell + yaw_dumbbell,method="parRF",data=trainer)
 pred1 <- predict(mod1,tester)
 cm1 <- confusionMatrix(pred1,tester$classe)  ##.9653 Acc
 cm1$overall['Accuracy']
